@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <style>
+        #msg {
+            width: 400px;
+            height: 300px;
+            overflow: auto;
+            border: 1px solid #000;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function msg(str) {
+                var dbg = $("#msg");
+                dbg.append('<p>'+str+'</p>');
+                dbg.prop({
+                    'scrollTop': dbg.prop('scrollHeight')
+                })
+            }
+
+            var ws = new WebSocket("ws://127.0.0.1:8080");
+            ws.onmessage = function(evt) {
+                var ms = evt.data
+                console.log(evt)
+                msg(ms)
+            };
+
+            ws.onclose = function() {
+            };
+            ws.onopen = function() {
+
+            };
+            $('#domsg').click(function() {
+                ws.send($('#val').val())
+                $('#val').val('');
+                $('#val').focus();
+            })
+        });
+    </script>
+</head>
+<body>
+<input type="text" id="val">
+
+</input>
+<button id="domsg">
+    ds
+</button>
+<div id="debug"></div>
+<div id="msg"></div>
+
+</body>
+</html>
